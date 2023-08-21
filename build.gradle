@@ -20,6 +20,10 @@ versioner {
     }
 }
 
+bootJar {
+    archiveFileName = 'torrent-auto-remover.jar'
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
