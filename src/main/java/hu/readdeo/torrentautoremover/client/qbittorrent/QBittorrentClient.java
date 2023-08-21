@@ -37,6 +37,9 @@ public class QBittorrentClient implements Client {
     @Value("${qbittorrent.delete.files}")
     private boolean deleteFiles;
 
+    @Value("${qbittorrent.url}")
+    private String url;
+
     private String cookie;
 
     public TorrentList getTorrentList() {
@@ -106,8 +109,6 @@ public class QBittorrentClient implements Client {
                 .forEach(
                         (torrent) -> {
                             try {
-                                System.out.println(torrent.getData());
-                                System.out.println(torrent.getName());
                                 JSONObject torrentJson = new JSONObject(torrent.getData());
                                 String hash = getHash(torrentJson);
                                 if (!stringBuilder.isEmpty()) {
@@ -152,7 +153,7 @@ public class QBittorrentClient implements Client {
     }
 
     private void login() {
-        log.info("Logging in");
+        log.info("Logging in to {}", url);
         ResponseEntity<String> loginResponse = sendLoginRequest();
         handleLoginResponse(loginResponse);
     }
