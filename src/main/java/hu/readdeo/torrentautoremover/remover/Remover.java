@@ -20,6 +20,9 @@ public class Remover {
     @Value("${torrent.remove.threshold.days}")
     private int thresholdDays;
 
+    @Value("${torrent.dry.run}")
+    private boolean dryRun;
+
     public void run() {
         LocalDateTime thresholdTime = LocalDateTime.now().minusDays(thresholdDays);
         log.trace("thresholdTime {}", thresholdTime);
@@ -43,7 +46,7 @@ public class Remover {
     private void removeTorrents(TorrentList torrentsToRemove) {
         if (!torrentsToRemove.getTorrents().isEmpty()) {
             log.info("Removing torrents");
-            client.removeTorrents(torrentsToRemove);
+            if (!dryRun) client.removeTorrents(torrentsToRemove);
         } else {
             log.info("Nothing to do.");
         }
@@ -54,8 +57,6 @@ public class Remover {
         if (torrent.getAddedOn().isBefore(thresholdTime)) {
             log.debug("Deleting torrent: {}", torrent.getName());
             torrentsToRemove.add(torrent);
-        } else {
-            log.debug("Keeping torrent: {}", torrent.getName());
         }
     }
 }

@@ -7,7 +7,7 @@ By default, the application is removing torrents that are older than 14 days and
 - Build it with bootjar.
 - Create application.properties file next to the jar.
 - Edit the properties to fit your needs, shown below.
-- start it with java -jar remover.jar
+- start it with java -jar torrent-auto-remover.jar
 
 ### application.properties file content
 By default, the application is using the configuration shown below. You can skip the properties file if it is good for you.
@@ -19,4 +19,5 @@ qbittorrent.delete.files=true
 
 torrent.remove.threshold.days=14
 torrent.category=AUTO_REMOVE
+torrent.dry.run=false
 ```
