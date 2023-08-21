@@ -20,8 +20,7 @@ public class Remover {
     @Value("${torrent.remove.threshold.days}")
     private int thresholdDays;
 
-    @PostConstruct
-    private void postConstruct() {
+    public void run() {
         LocalDateTime thresholdTime = LocalDateTime.now().minusDays(thresholdDays);
         log.trace("thresholdTime {}", thresholdTime);
         TorrentList torrents = client.getTorrentList();
