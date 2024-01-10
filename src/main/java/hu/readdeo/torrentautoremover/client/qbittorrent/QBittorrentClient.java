@@ -54,7 +54,8 @@ public class QBittorrentClient implements Client {
             JSONObject torrentJson = getTorrent(torrentsJson, i);
             LocalDateTime addedOnTime = getAddedOnTime(torrentJson);
             String name = getTorrentName(torrentJson);
-            Torrent torrent = new Torrent(torrentJson.toString(), name, addedOnTime);
+            String hash = getHash(torrentJson);
+            Torrent torrent = new Torrent(torrentJson.toString(), name, hash, addedOnTime);
             torrentList.add(torrent);
         }
         return torrentList;
@@ -64,6 +65,11 @@ public class QBittorrentClient implements Client {
         String removableTorrentHashes = getTorrentsToRemove(torrents);
         log.debug("removableTorrentHashes: {}", removableTorrentHashes);
         sendDeleteTorrentsRequest(removableTorrentHashes);
+    }
+
+    @Override
+    public void resumeTorrents(String hashes) {
+        client.resumetorrents(hashes);
     }
 
     private String getTorrentName(JSONObject torrent) {

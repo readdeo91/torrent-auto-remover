@@ -11,5 +11,6 @@ import lombok.Setter;
 public class Torrent {
     @Getter @Setter private String data;
     @Getter @Setter private String name;
+    @Getter @Setter private String hash;
     @Getter private LocalDateTime addedOn;
 }

@@ -1,5 +1,6 @@
 package hu.readdeo.torrentautoremover.client.qbittorrent;
 
+import feign.Param;
 import hu.readdeo.torrentautoremover.client.FeignConfig;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.DeleteTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.GetTorrentsRequest;
@@ -47,4 +48,11 @@ public interface QBittorrentFeign {
                             defaultValue = "application/x-www-form-urlencoded; charset=UTF-8")
                     String contentType,
             @RequestHeader(value = "Cookie") String cookie);
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/api/v2/torrents/resume?hash={torrentHashes}",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    String resumetorrents(
+            @Param("torrentHashes") String torrentHashes);
 }

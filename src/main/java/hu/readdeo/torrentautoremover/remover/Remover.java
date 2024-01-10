@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,18 @@ public class Remover {
     @Value("${torrent.dry.run}")
     private boolean dryRun;
 
+    @Autowired
+    private Resumer resumer;
+
     public void run() {
         LocalDateTime thresholdTime = LocalDateTime.now().minusDays(thresholdDays);
         log.trace("thresholdTime {}", thresholdTime);
         TorrentList torrents = client.getTorrentList();
         TorrentList torrentsToRemove = getRemovableTorrentList(torrents, thresholdTime);
         removeTorrents(torrentsToRemove);
+
+        resumer.resumeTorrents(torrents);
+
         log.info("Finished, exiting...");
     }
 
