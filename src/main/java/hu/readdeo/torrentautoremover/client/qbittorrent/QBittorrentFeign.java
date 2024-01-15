@@ -53,9 +53,9 @@ public interface QBittorrentFeign {
     String resumeTorrents(
             @RequestBody ResumeTorrentsRequest resumeTorrentsRequest,
             @RequestHeader(
-                    value = "Content-type",
-                    required = false,
-                    defaultValue = "application/x-www-form-urlencoded; charset=UTF-8")
-            String contentType,
+                            value = "Content-type",
+                            required = false,
+                            defaultValue = "application/x-www-form-urlencoded; charset=UTF-8")
+                    String contentType,
             @RequestHeader(value = "Cookie") String cookie);
 }

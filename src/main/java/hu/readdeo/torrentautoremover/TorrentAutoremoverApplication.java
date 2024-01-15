@@ -10,7 +10,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class TorrentAutoremoverApplication {
 
     public static void main(String[] args) {
-        final ConfigurableApplicationContext context = SpringApplication.run(TorrentAutoremoverApplication.class, args);
+        final ConfigurableApplicationContext context =
+                SpringApplication.run(TorrentAutoremoverApplication.class, args);
         final Runner runner = context.getBean(Runner.class);
         runner.run();
     }

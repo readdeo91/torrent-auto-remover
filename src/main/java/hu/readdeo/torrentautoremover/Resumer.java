@@ -3,12 +3,11 @@ package hu.readdeo.torrentautoremover;
 import hu.readdeo.torrentautoremover.client.qbittorrent.QBittorrentClient;
 import hu.readdeo.torrentautoremover.model.Torrent;
 import hu.readdeo.torrentautoremover.model.TorrentList;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -27,7 +26,7 @@ public class Resumer {
         client.resumeTorrents(hashes);
     }
 
-    private String getHashes (TorrentList torrents) {
+    private String getHashes(TorrentList torrents) {
         StringBuilder hashesBulder = new StringBuilder();
         torrents.getTorrents()
                 .forEach(
@@ -44,14 +43,12 @@ public class Resumer {
         torrents.getTorrents()
                 .forEach(
                         (torrent) -> {
-                            addTorrentToNotRemoveList(
-                                    torrent, torrentsToResume);
+                            addTorrentToNotRemoveList(torrent, torrentsToResume);
                         });
         return torrentsToResume;
     }
 
-    private void addTorrentToNotRemoveList(
-            Torrent torrent, TorrentList torrents) {
+    private void addTorrentToNotRemoveList(Torrent torrent, TorrentList torrents) {
         LocalDateTime thresholdTime = LocalDateTime.now().minusHours(resumeThreshholdHours);
         if (torrent.getAddedOn().isAfter(thresholdTime)) {
             log.debug("Resuming torrent: {}", torrent.getName());
