@@ -45,7 +45,7 @@ public class Resumer {
                 .forEach(
                         (torrent) -> {
                             addTorrentToNotRemoveList(
-                                    torrent, torrents);
+                                    torrent, torrentsToResume);
                         });
         return torrentsToResume;
     }

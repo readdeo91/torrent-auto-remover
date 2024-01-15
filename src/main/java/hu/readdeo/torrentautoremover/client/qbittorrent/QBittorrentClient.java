@@ -4,6 +4,7 @@ import hu.readdeo.torrentautoremover.client.Client;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.DeleteTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.GetTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.LoginRequest;
+import hu.readdeo.torrentautoremover.client.qbittorrent.model.ResumeTorrentsRequest;
 import hu.readdeo.torrentautoremover.model.Torrent;
 import hu.readdeo.torrentautoremover.model.TorrentList;
 import java.time.LocalDateTime;
@@ -41,6 +42,7 @@ public class QBittorrentClient implements Client {
     private String url;
 
     private String cookie;
+    private String contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
     public TorrentList getTorrentList() {
         authorizeIfNeeded();
@@ -69,7 +71,9 @@ public class QBittorrentClient implements Client {
 
     @Override
     public void resumeTorrents(String hashes) {
-        client.resumetorrents(hashes);
+        ResumeTorrentsRequest resumeTorrentsRequest = new ResumeTorrentsRequest();
+        resumeTorrentsRequest.setHashes(hashes);
+        client.resumeTorrents(resumeTorrentsRequest, contentType, cookie);
     }
 
     private String getTorrentName(JSONObject torrent) {
@@ -106,7 +110,7 @@ public class QBittorrentClient implements Client {
         DeleteTorrentsRequest deleteTorrentsRequest =
                 new DeleteTorrentsRequest(removableTorrentHashes, deleteFiles);
         client.deleteTorrents(
-                deleteTorrentsRequest, "application/x-www-form-urlencoded; charset=UTF-8", cookie);
+                deleteTorrentsRequest, contentType, cookie);
     }
 
     private String getTorrentsToRemove(TorrentList torrents) {

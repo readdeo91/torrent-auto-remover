@@ -1,17 +1,14 @@
 package hu.readdeo.torrentautoremover.client.qbittorrent;
 
-import feign.Param;
 import hu.readdeo.torrentautoremover.client.FeignConfig;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.DeleteTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.GetTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.LoginRequest;
+import hu.readdeo.torrentautoremover.client.qbittorrent.model.ResumeTorrentsRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(
         value = "qbittorrent-client",
@@ -50,9 +47,15 @@ public interface QBittorrentFeign {
             @RequestHeader(value = "Cookie") String cookie);
 
     @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/api/v2/torrents/resume?hash={torrentHashes}",
+            method = RequestMethod.POST,
+            value = "/api/v2/torrents/resume",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    String resumetorrents(
-            @Param("torrentHashes") String torrentHashes);
+    String resumeTorrents(
+            @RequestBody ResumeTorrentsRequest resumeTorrentsRequest,
+            @RequestHeader(
+                    value = "Content-type",
+                    required = false,
+                    defaultValue = "application/x-www-form-urlencoded; charset=UTF-8")
+            String contentType,
+            @RequestHeader(value = "Cookie") String cookie);
 }
