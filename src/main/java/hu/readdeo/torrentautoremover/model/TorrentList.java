@@ -1,4 +1,4 @@
-package hu.readdeo.torrentautoremover.remover.model;
+package hu.readdeo.torrentautoremover.model;
 
 import java.util.LinkedList;
 import java.util.List;

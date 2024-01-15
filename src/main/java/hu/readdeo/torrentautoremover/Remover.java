@@ -1,12 +1,13 @@
-package hu.readdeo.torrentautoremover.remover;
+package hu.readdeo.torrentautoremover;
 
 import hu.readdeo.torrentautoremover.client.qbittorrent.QBittorrentClient;
-import hu.readdeo.torrentautoremover.remover.model.Torrent;
-import hu.readdeo.torrentautoremover.remover.model.TorrentList;
-import jakarta.annotation.PostConstruct;
+import hu.readdeo.torrentautoremover.model.Torrent;
+import hu.readdeo.torrentautoremover.model.TorrentList;
+
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,14 @@ public class Remover {
     @Value("${torrent.dry.run}")
     private boolean dryRun;
 
-    public void run() {
+
+
+    public void remove(TorrentList torrents) {
         LocalDateTime thresholdTime = LocalDateTime.now().minusDays(thresholdDays);
         log.trace("thresholdTime {}", thresholdTime);
-        TorrentList torrents = client.getTorrentList();
         TorrentList torrentsToRemove = getRemovableTorrentList(torrents, thresholdTime);
         removeTorrents(torrentsToRemove);
-        log.info("Finished, exiting...");
+        log.info("Finished removing torrents");
     }
 
     private static TorrentList getRemovableTorrentList(TorrentList torrents, LocalDateTime thresholdTime) {

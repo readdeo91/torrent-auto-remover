@@ -4,8 +4,9 @@ import hu.readdeo.torrentautoremover.client.Client;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.DeleteTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.GetTorrentsRequest;
 import hu.readdeo.torrentautoremover.client.qbittorrent.model.LoginRequest;
-import hu.readdeo.torrentautoremover.remover.model.Torrent;
-import hu.readdeo.torrentautoremover.remover.model.TorrentList;
+import hu.readdeo.torrentautoremover.client.qbittorrent.model.ResumeTorrentsRequest;
+import hu.readdeo.torrentautoremover.model.Torrent;
+import hu.readdeo.torrentautoremover.model.TorrentList;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class QBittorrentClient implements Client {
     private String url;
 
     private String cookie;
+    private String contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
     public TorrentList getTorrentList() {
         authorizeIfNeeded();
@@ -54,7 +56,8 @@ public class QBittorrentClient implements Client {
             JSONObject torrentJson = getTorrent(torrentsJson, i);
             LocalDateTime addedOnTime = getAddedOnTime(torrentJson);
             String name = getTorrentName(torrentJson);
-            Torrent torrent = new Torrent(torrentJson.toString(), name, addedOnTime);
+            String hash = getHash(torrentJson);
+            Torrent torrent = new Torrent(torrentJson.toString(), name, hash, addedOnTime);
             torrentList.add(torrent);
         }
         return torrentList;
@@ -64,6 +67,13 @@ public class QBittorrentClient implements Client {
         String removableTorrentHashes = getTorrentsToRemove(torrents);
         log.debug("removableTorrentHashes: {}", removableTorrentHashes);
         sendDeleteTorrentsRequest(removableTorrentHashes);
+    }
+
+    @Override
+    public void resumeTorrents(String hashes) {
+        ResumeTorrentsRequest resumeTorrentsRequest = new ResumeTorrentsRequest();
+        resumeTorrentsRequest.setHashes(hashes);
+        client.resumeTorrents(resumeTorrentsRequest, contentType, cookie);
     }
 
     private String getTorrentName(JSONObject torrent) {
@@ -100,7 +110,7 @@ public class QBittorrentClient implements Client {
         DeleteTorrentsRequest deleteTorrentsRequest =
                 new DeleteTorrentsRequest(removableTorrentHashes, deleteFiles);
         client.deleteTorrents(
-                deleteTorrentsRequest, "application/x-www-form-urlencoded; charset=UTF-8", cookie);
+                deleteTorrentsRequest, contentType, cookie);
     }
 
     private String getTorrentsToRemove(TorrentList torrents) {
