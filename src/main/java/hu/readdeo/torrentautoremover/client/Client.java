@@ -6,5 +6,6 @@ public interface Client {
     TorrentList getTorrentList();
 
     void removeTorrents(TorrentList torrentsToDelete);
+
     void resumeTorrents(String hashes);
 }

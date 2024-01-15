@@ -109,8 +109,7 @@ public class QBittorrentClient implements Client {
     private void sendDeleteTorrentsRequest(String removableTorrentHashes) {
         DeleteTorrentsRequest deleteTorrentsRequest =
                 new DeleteTorrentsRequest(removableTorrentHashes, deleteFiles);
-        client.deleteTorrents(
-                deleteTorrentsRequest, contentType, cookie);
+        client.deleteTorrents(deleteTorrentsRequest, contentType, cookie);
     }
 
     private String getTorrentsToRemove(TorrentList torrents) {
