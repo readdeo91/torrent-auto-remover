@@ -1,6 +1,5 @@
 package hu.readdeo.torrentautoremover;
 
-import hu.readdeo.torrentautoremover.remover.Remover;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -12,7 +11,7 @@ public class TorrentAutoremoverApplication {
 
     public static void main(String[] args) {
         final ConfigurableApplicationContext context = SpringApplication.run(TorrentAutoremoverApplication.class, args);
-        final Remover remover = context.getBean(Remover.class);
-        remover.run();
+        final Runner runner = context.getBean(Runner.class);
+        runner.run();
     }
 }

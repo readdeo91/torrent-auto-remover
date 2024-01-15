@@ -1,4 +1,4 @@
-package hu.readdeo.torrentautoremover.remover.model;
+package hu.readdeo.torrentautoremover.model;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
